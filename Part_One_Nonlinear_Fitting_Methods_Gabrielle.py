@@ -106,7 +106,7 @@ calculated_rates = radiation_rate_calc(
 
 time_data = []
 for i in primary_sample_num:
-    time_data.append(i*20/60)
+    time_data.append((i-1)*20/60)
 
 # Getting log of y_i
 
@@ -125,23 +125,27 @@ ydata, uncertainty_ydata = unpack_calculated_rates(calculated_rates)
 # print(ydata)
 # print(uncertainty_ydata)
 
+# Linear Fit
+
 logged_ydata = np.log(ydata)
 logged_uncertainty_ydata = []
 
 for i in np.arange(len(uncertainty_ydata)):
-    logged_uncertainty_ydata.append(uncertainty_ydata[i]/logged_ydata[i])
+    logged_uncertainty_ydata.append(uncertainty_ydata[i]/ydata[i])
 
 # print(logged_ydata)
 # print(logged_uncertainty_ydata)
 
 popt_log_linear, pcov_log_linear = scipy.optimize.curve_fit(
-    linear_regression_model, time_data, logged_ydata,
+    linear_regression_model, np.array(time_data), logged_ydata,
     sigma=logged_uncertainty_ydata, absolute_sigma=True)
 
 print(popt_log_linear)
 print(pcov_log_linear)
 
 # print(time_data)
+
+# Nonlinear Fit
 
 popt_nonlinear, pcov_nonlinear = scipy.optimize.curve_fit(
     nonlinear_regression_model, time_data, ydata,
@@ -150,19 +154,47 @@ popt_nonlinear, pcov_nonlinear = scipy.optimize.curve_fit(
 print(popt_nonlinear)
 print(pcov_nonlinear)
 
+# Theoretical Fit
+
+y_theo_data = []
+
+for i in np.arange(len(time_data)):
+    y_i = (ydata[0])*(0.5**(time_data[i]/2.6))
+    y_theo_data.append(y_i)
+
 plt.figure(1)
 plt.errorbar(time_data, ydata,
              yerr=uncertainty_ydata, marker="o", ls='',
              label="Raw Data")
 
 plt.plot(time_data, math.e**linear_regression_model(
-    np.log(time_data), *popt_log_linear), ls='--',
+    np.array(time_data), *popt_log_linear), ls='--',
          label='e^(Linear Regression Model)')
 
 plt.plot(time_data,
-         nonlinear_regression_model(np.array(time_data), *popt_nonlinear), ls="-",
-         label='Nonlinear Regression Model')
+         nonlinear_regression_model(np.array(time_data), *popt_nonlinear),
+         ls="-", label='Nonlinear Regression Model')
+plt.plot(time_data, y_theo_data, ls='-.', label='Theoretical Model')
+
+# plt.yscale('log')
+
 plt.show()
 
+# Instruction 8: Calculate and output
+# half-life values for each regression method.
+
+# Linear Regression Half Life Calculation
+
+t_half_linear = (np.log(1/2))/popt_log_linear[0]
+print("This is the linear regression half-life ->")
+print(t_half_linear)
+
+# Nonlinear Regression Half Life Calculation
+
+t_half_nonlinear = (np.log(1/2))/popt_nonlinear[0]
+print("This is the nonlinear regression half-life ->")
+print(t_half_nonlinear)
+
+# Instruction 9: Calculate the variance.
 
 
