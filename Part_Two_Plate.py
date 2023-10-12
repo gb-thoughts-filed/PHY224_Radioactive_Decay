@@ -26,9 +26,14 @@ def histogram_plot(data, rounded_range, interval):
 
 
 def poisson_distribution(num_of_counts, average):
-    return np.exp(-average) * numpy.power(average, np.longdouble(num_of_counts), dtype=np.float128) / special.gamma(num_of_counts + 1)
+    return np.exp(-average) * numpy.power(average, np.longdouble(num_of_counts), dtype=np.float128) / \
+        special.gamma(num_of_counts + 1)
     # dtype=np.float128 added for bigger power calculations.
     # If AttributeError: module 'numpy' has no attribute 'float128' is returned, change it to dtype=np.float64
+
+
+def chi_square(y, prediction, uncertainty, num_of_param):
+    return numpy.sum(((y - prediction) / uncertainty) ** 2) / (len(y) - num_of_param)
 
 
 if __name__ == "__main__":
