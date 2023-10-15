@@ -196,12 +196,12 @@ plt.legend()
 def difference_calc(model_data, raw_data):
     lst = []
     for j in np.arange(len(raw_data)):
-        lst.append(abs(model_data[j]-raw_data[j]))
+        lst.append(model_data[j]-raw_data[j])
     return lst
 
 
 residual_linear = difference_calc(list(np.e**linear_regression_model(
-    np.array(time_data),*popt_log_linear)), ydata)
+    np.array(time_data), *popt_log_linear)), ydata)
 
 residual_nonlinear = difference_calc(list(
     nonlinear_regression_model(np.array(time_data), *popt_nonlinear)), ydata)
@@ -210,6 +210,8 @@ residual_theoretical = difference_calc(list(y_theo_data), ydata)
 
 
 plt.figure(2)
+
+plt.hlines(0, -1, 21, colors="black")
 
 plt.plot(time_data, residual_linear, marker="X",
          label='e^(Linear Regression Model)')
