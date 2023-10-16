@@ -36,7 +36,7 @@ def floor_dig(num, decimal):
 
 def histogram_plot(data, rounded_range, interval):
     plt.xlabel("Number of Counts")
-    plt.ylabel("Frequency Density")
+    plt.ylabel("Probability Density")
     # round the range to nearest 10 that in include the all the num in data.
     print(rounded_range, (rounded_range[1] - rounded_range[0]) / interval)
     plt.hist(data, bins=int((rounded_range[1] - rounded_range[0]) / interval), density=True,
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     plt.plot(gaussian_x, gaussian_probabilities, label="Gaussian distribution")
     plt.legend()
     plt.tight_layout()
-    plt.savefig("part_two_analysis")
+    plt.savefig("part_two_analysis_plate")
 
     plt.figure("Plate Residual")
     plt.xlabel("number of counts")
