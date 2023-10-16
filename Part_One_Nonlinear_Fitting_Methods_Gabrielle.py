@@ -196,7 +196,7 @@ plt.legend()
 def difference_calc(model_data, raw_data):
     lst = []
     for j in np.arange(len(raw_data)):
-        lst.append(model_data[j]-raw_data[j])
+        lst.append(abs(model_data[j]-raw_data[j]))
     return lst
 
 
@@ -223,13 +223,14 @@ plt.plot(time_data, residual_theoretical, marker="D",
          label='Theoretical Model')
 
 plt.xlabel("Time (t) in Minutes")
-plt.ylabel("Model Count Rate in Counts per 20 Seconds - Measured Count Rate",
+plt.ylabel("|Model Count Rate in Counts per 20 Seconds - Measured Count Rate|",
            wrap=True)
 plt.title("Residual Plot of Time in Minutes v.s. "
           "The Count Rate Predicted by a Linear Regression Model,"
           "The Count Rate Predicted by a Nonlinear Regression Model,"
           "The Count Rate Predicted by a Theoretical Model"
-          "All With the Raw Measured Count Rate Subtracted", wrap=True)
+          "All With the Raw Measured Count Rate Subtracted"
+          "(Absolute Value)", wrap=True)
 
 plt.legend()
 plt.show()
